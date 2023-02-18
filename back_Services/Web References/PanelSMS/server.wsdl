@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:smsserver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:smsserver" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:smsserver">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="ListArray">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="xsd:string[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="input_data_type">
+        <xsd:all>
+          <xsd:element name="key" nillable="true" type="xsd:string" />
+          <xsd:element name="value" nillable="true" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="dataTypeHolder">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute wsdl:arrayType="tns:input_data_type[]" ref="SOAP-ENC:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="sendPatternSmsRequest">
+    <wsdl:part name="fromNum" type="xsd:string" />
+    <wsdl:part name="toNum" type="tns:ListArray" />
+    <wsdl:part name="user" type="xsd:string" />
+    <wsdl:part name="pass" type="xsd:string" />
+    <wsdl:part name="pattern_code" type="xsd:string" />
+    <wsdl:part name="input_data" type="tns:dataTypeHolder" />
+  </wsdl:message>
+  <wsdl:message name="sendPatternSmsResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCreditRequest" />
+  <wsdl:message name="GetCreditResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="smsserverPortType">
+    <wsdl:operation name="sendPatternSms">
+      <documentation>send a sms with pattern</documentation>
+      <wsdl:input message="tns:sendPatternSmsRequest" />
+      <wsdl:output message="tns:sendPatternSmsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCredit">
+      <documentation>check your credit</documentation>
+      <wsdl:input message="tns:GetCreditRequest" />
+      <wsdl:output message="tns:GetCreditResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="smsserverBinding" type="tns:smsserverPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="sendPatternSms">
+      <soap:operation soapAction="sendPatternSms" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="188.0.240.110" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="188.0.240.110" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCredit">
+      <soap:operation soapAction="GetCredit" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="188.0.240.110" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="188.0.240.110" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="smsserver">
+    <wsdl:port name="smsserverPort" binding="tns:smsserverBinding">
+      <soap:address location="http://188.0.240.110/class/sms/csharpservice_new/server.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

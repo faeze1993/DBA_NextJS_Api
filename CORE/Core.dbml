@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DBA" Class="CoreDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=masterdba.ir,1433;Initial Catalog=DBA;User ID=qtest;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="CORE.Properties.Settings" SettingsPropertyName="DBAConnectionString3" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ArticleFiles" Member="ArticleFiles">
+    <Type Name="ArticleFile">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArticleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FilesID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="LinkAddRess" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArticleType" Member="ArticleTypes">
+    <Type Name="ArticleType">
+      <Column Name="ID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LatinName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="ArticleType_Article" Member="Articles" ThisKey="ID" OtherKey="ArticleTypeID" Type="Article" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comment" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArticleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Comment_ReplyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsConfirm" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsReplyByAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Comment_Comment" Member="Comments" ThisKey="ID" OtherKey="Comment_ReplyID" Type="Comment" />
+      <Association Name="Comment_Comment" Member="Comment1" ThisKey="Comment_ReplyID" OtherKey="ID" Type="Comment" IsForeignKey="true" />
+      <Association Name="User_Comment" Member="User" ThisKey="UserID" OtherKey="ID" Type="User" IsForeignKey="true" />
+      <Association Name="Article_Comment" Member="Article" ThisKey="ArticleID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Gender" Member="Genders">
+    <Type Name="Gender">
+      <Column Name="ID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="Char(7) NOT NULL" CanBeNull="false" />
+      <Column Name="LatinName" Type="System.String" DbType="Char(7) NOT NULL" CanBeNull="false" />
+      <Association Name="Gender_People" Member="Peoples" ThisKey="ID" OtherKey="GenderID" Type="People" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PanelCustomValue" Member="PanelCustomValues">
+    <Type Name="PanelCustomValue">
+      <Column Name="ID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="LatinName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Files_ImageID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="Section" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role">
+      <Column Name="ID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Role_UserRole" Member="UserRoles" ThisKey="ID" OtherKey="RoleID" Type="UserRole" />
+      <Association Name="Role_PanelMenu" Member="PanelMenus" ThisKey="ID" OtherKey="RoleID" Type="PanelMenu" />
+      <Association Name="Role_PanelMenuRole" Member="PanelMenuRoles" ThisKey="ID" OtherKey="RoleID" Type="PanelMenuRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PasswordExpirationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="LastPasswordChangedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreationDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsOnLine" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsEnabled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="LastEnabledDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="FailedPasswordAttemptCount" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ChangedPermission" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="FinishLockDatetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IPAddress" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="VerificationCode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExpireTimeVerificationCode" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="HasVerify" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="User_Comment" Member="Comments" ThisKey="ID" OtherKey="UserID" Type="Comment" />
+      <Association Name="User_UserRole" Member="UserRoles" ThisKey="ID" OtherKey="UserID" Type="UserRole" />
+      <Association Name="User_Ticket" Member="Tickets" ThisKey="ID" OtherKey="UserId" Type="Ticket" />
+      <Association Name="User_UserFile" Member="UserFiles" ThisKey="ID" OtherKey="UserID" Type="UserFile" />
+      <Association Name="User_Article" Member="Articles" ThisKey="ID" OtherKey="User_AuthorID" Type="Article" />
+      <Association Name="User_Article1" Member="Articles1" ThisKey="ID" OtherKey="User_LastEditID" Type="Article" />
+      <Association Name="People_User" Member="People" ThisKey="ID" OtherKey="ID" Type="People" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRoles" Member="UserRoles">
+    <Type Name="UserRole">
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Role_UserRole" Member="Role" ThisKey="RoleID" OtherKey="ID" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="User_UserRole" Member="User" ThisKey="UserID" OtherKey="ID" Type="User" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ConectUs" Member="ConectUs">
+    <Type Name="ConectUs">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsReplied" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PanelMenu" Member="PanelMenus">
+    <Type Name="PanelMenu">
+      <Column Name="ID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="NavigateUrl" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Files_IconID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="PanelMenu_PanelMenuRole" Member="PanelMenuRoles" ThisKey="ID" OtherKey="PanelMenuID" Type="PanelMenuRole" />
+      <Association Name="Role_PanelMenu" Member="Role" ThisKey="RoleID" OtherKey="ID" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FilesView" Member="FilesViews">
+    <Type Name="FilesView">
+      <Column Name="stream_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="directory" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="file_type" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="creation_time" Type="System.DateTimeOffset" DbType="DateTimeOffset NOT NULL" CanBeNull="false" />
+      <Column Name="cached_file_size" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="is_directory" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.People" Member="Peoples">
+    <Type Name="People">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="BirthDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="GenderID" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="E_mail" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="Files_ImageID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="People_User" Member="User" ThisKey="ID" OtherKey="ID" Type="User" Cardinality="One" />
+      <Association Name="Gender_People" Member="Gender" ThisKey="GenderID" OtherKey="ID" Type="Gender" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Ticket" Member="Tickets">
+    <Type Name="Ticket">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsReplied" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="User_Ticket" Member="User" ThisKey="UserId" OtherKey="ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserFiles" Member="UserFiles">
+    <Type Name="UserFile">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FilesID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="User_UserFile" Member="User" ThisKey="UserID" OtherKey="ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PanelMenuRoles" Member="PanelMenuRoles">
+    <Type Name="PanelMenuRole">
+      <Column Name="RoleID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PanelMenuID" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="PanelMenu_PanelMenuRole" Member="PanelMenu" ThisKey="PanelMenuID" OtherKey="ID" Type="PanelMenu" IsForeignKey="true" />
+      <Association Name="Role_PanelMenuRole" Member="Role" ThisKey="RoleID" OtherKey="ID" Type="Role" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Slider" Member="Sliders">
+    <Type Name="Slider">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Files_ImageID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="LinkUrl" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserViewHistory" Member="UserViewHistories">
+    <Type Name="UserViewHistory">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArticleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IP" Type="System.String" DbType="Char(15)" CanBeNull="true" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Article_UserViewHistory" Member="Article" ThisKey="ArticleID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArticleTree" Member="ArticleTrees">
+    <Type Name="ArticleTree">
+      <Column Name="ID" Type="System.Boolean" DbType="Bit NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextCompressed" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsExpire" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Files_ImageID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="LinkUrl" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Article" Member="Articles">
+    <Type Name="Article">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="LatinNm" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Body" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="ParentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Files_ImageID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="User_AuthorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ArticleTypeID" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Summery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="KeyWords" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="TechnicalSpecification" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="UploadDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LastPublishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDraft" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TimeToRead" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="Article_PreID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Article_NextID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Article_CloneID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Views" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="User_LastEditID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FragmentedText" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Breadcrumbs" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Column Name="Refrences" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Enable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Article_Comment" Member="Comments" ThisKey="ID" OtherKey="ArticleID" Type="Comment" />
+      <Association Name="Article_UserViewHistory" Member="UserViewHistories" ThisKey="ID" OtherKey="ArticleID" Type="UserViewHistory" />
+      <Association Name="Article_Article" Member="Articles" ThisKey="ID" OtherKey="ParentID" Type="Article" />
+      <Association Name="Article_Article1" Member="Articles1" ThisKey="ID" OtherKey="Article_CloneID" Type="Article" />
+      <Association Name="Article_Article2" Member="Articles2" ThisKey="ID" OtherKey="Article_NextID" Type="Article" />
+      <Association Name="Article_Article3" Member="Articles3" ThisKey="ID" OtherKey="Article_PreID" Type="Article" />
+      <Association Name="Article_Article" Member="Article1" ThisKey="ParentID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+      <Association Name="Article_Article1" Member="Article2" ThisKey="Article_CloneID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+      <Association Name="Article_Article2" Member="Article3" ThisKey="Article_NextID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+      <Association Name="Article_Article3" Member="Article4" ThisKey="Article_PreID" OtherKey="ID" Type="Article" IsForeignKey="true" />
+      <Association Name="ArticleType_Article" Member="ArticleType" ThisKey="ArticleTypeID" OtherKey="ID" Type="ArticleType" IsForeignKey="true" />
+      <Association Name="User_Article" Member="User" ThisKey="User_AuthorID" OtherKey="ID" Type="User" IsForeignKey="true" />
+      <Association Name="User_Article1" Member="User1" ThisKey="User_LastEditID" OtherKey="ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProductRequest" Member="ProductRequests">
+    <Type Name="ProductRequest">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Product" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsReplied" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ViewAllTree" Member="ViewAllTrees">
+    <Type Name="ViewAllTree">
+      <Column Name="Trees" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.SaveFiles" Method="SaveFiles">
+    <Parameter Name="stream_id" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Parameter Name="filename" Type="System.String" DbType="NVarChar(255)" />
+    <Parameter Name="file_stream" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" />
+    <Parameter Name="DirPath" Parameter="dirPath" Type="System.String" DbType="NVarChar(2000)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetChiledNode" Method="GetChiledNode">
+    <Parameter Name="StreamID" Parameter="streamID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="GetChiledNodeResult">
+      <Column Name="stream_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="directory" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="cached_file_size" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="creation_time" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="is_directory" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GetFiesAncestor" Method="GetFiesAncestor">
+    <Parameter Name="Stream_ID" Parameter="stream_ID" Type="System.Guid" DbType="UniqueIdentifier" />
+    <ElementType Name="GetFiesAncestorResult">
+      <Column Name="[Level]" Member="Level" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="stream_id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.Clone_Article" Method="Clone_Article">
+    <Parameter Name="ArticleID" Parameter="articleID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="User_AuthorID" Parameter="user_AuthorID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="Clone_ArticleResult">
+      <Column Name="Article_CloneID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GetArticleAncestor" Method="GetArticleAncestor">
+    <Parameter Name="ArticleID" Parameter="articleID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="GetArticleAncestorResult">
+      <Column Name="[Level]" Member="Level" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.CommentPagination" Method="CommentPagination">
+    <Parameter Name="ArticleID" Parameter="articleID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="FormStep" Parameter="formStep" Type="System.Int32" DbType="Int" />
+    <Parameter Name="StepNumber" Parameter="stepNumber" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UserID" Parameter="userID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="CommentPaginationResult">
+      <Column Name="Cmnt_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_ArticleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_FullName" Type="System.String" DbType="VarChar(201) NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_UserImage" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="cmnt_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_Description" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_IsConfirm" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="cmnt_AdminOrPublisher" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="reply_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="reply_ArticleID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="reply_UserID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="reply_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="reply_Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="reply_IsConfirm" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="reply_AdminOrPublisher" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.ArticleSearch" Method="ArticleSearch" IsComposable="true">
+    <Parameter Name="Text" Parameter="text" Type="System.String" DbType="VarChar(250)" />
+    <Parameter Name="Top" Parameter="top" Type="System.Int32" DbType="Int" />
+    <ElementType Name="ArticleSearchResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rank" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SetContextInfo" Method="SetContextInfo">
+    <Parameter Name="Text" Parameter="text" Type="System.String" DbType="VarChar(128)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ArticlePagination" Method="ArticlePagination">
+    <Parameter Name="FormStep" Parameter="formStep" Type="System.Int32" DbType="Int" />
+    <Parameter Name="StepNumber" Parameter="stepNumber" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UserID" Parameter="userID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Article_ParentID" Parameter="article_ParentID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="ArticlePaginationResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ParentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Summery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="AuthorName" Type="System.String" DbType="VarChar(201) NOT NULL" CanBeNull="false" />
+      <Column Name="UploadDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Views" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="ParentChildCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ArticleTypeID" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Rows" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SetNextPreArticle" Method="SetNextPreArticle">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Article_PreID" Parameter="article_PreID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Article_NextID" Parameter="article_NextID" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
