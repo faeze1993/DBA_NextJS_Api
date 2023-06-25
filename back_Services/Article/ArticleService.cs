@@ -475,6 +475,7 @@ namespace back_Services.Article
         }
 
         //Get All Articles that can display in archive page  
+        //برای پروژه نکست تمامی دیتا اپلود می شود و در همان نکست کنترل می شود
         public static List<ArticleViewModel> GetAllArticles2(int? articleId)
         {
             var db = new CoreDataContext();
@@ -484,7 +485,7 @@ namespace back_Services.Article
             var query = (from article in db.Articles
                          join people in db.Peoples on article.User_AuthorID equals people.ID
                          where !article.IsDraft && article.Enable
-                         select article);
+                         select article );
             if (articleId == null)
             {
                 q = query.Where(el => el.ParentID == null);
