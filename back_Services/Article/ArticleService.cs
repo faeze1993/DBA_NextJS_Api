@@ -881,5 +881,9 @@ namespace back_Services.Article
                 Description = "test article1 description"
             };
         }
+        public static void test()
+        {
+
+        }
     }
 }
